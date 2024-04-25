@@ -1,21 +1,17 @@
 const express = require("express");
 const router = express.Router();
-
 const users = require("../data/users");
 const error = require("../utilities/error");
+
+// Route handler for rendering users.ejs
+// router.get("/users", (req,res)=>{
+//   res.render("users", { users });
+// })
 
 router
   .route("/")
   .get((req, res) => {
-    const links = [
-      {
-        href: "users/:id",
-        rel: ":id",
-        type: "GET",
-      },
-    ];
-
-    res.json({ users, links });
+    res.render("users", { users });
   })
   .post((req, res, next) => {
     if (req.body.name && req.body.username && req.body.email) {

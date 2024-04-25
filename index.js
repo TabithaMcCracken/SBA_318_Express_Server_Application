@@ -1,19 +1,24 @@
 console.log('Hello World')
+// Import required modules
 const express = require("express");
 const bodyParser = require("body-parser");
-
 const users = require("./routes/users");
 const trails = require("./routes/trails");
+const ratings = require("./routes/ratings");
 const error = require("./utilities/error");
 
+// Create Express app
 const app = express();
 const port = 3000;
 
-// Parsing Middleware
+// Setup EJS template engine
+app.set("view engine", "ejs");
+
+// Middleware for Parsing
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ extended: true }));
 
-// Logging Middlewaare
+// Middleware for Logging
 app.use((req, res, next) => {
   const time = new Date();
 
@@ -28,12 +33,17 @@ ${time.toLocaleTimeString()}: Received a ${req.method} request to ${req.url}.`
   next();
 });
 
-
-// Use our Routes
+// Routes
 app.use("/api/users", users);
 app.use("/api/trails", trails);
+app.use("/api/ratings", ratings);
 
-// Adding some HATEOAS links.
+// Sets route handler for the root URL("/")
+app.get("/", (req, res) => {
+  res.render("index", { title: "Hiking Trails Page" });
+});
+
+// HATEOAS links
 app.get("/", (req, res) => {
   res.json({
     links: [
@@ -46,7 +56,7 @@ app.get("/", (req, res) => {
   });
 });
 
-// Adding some HATEOAS links.
+// HATEOAS links
 app.get("/api", (req, res) => {
   res.json({
     links: [
@@ -79,19 +89,13 @@ app.use((req, res, next) => {
   next(error(404, "Resource Not Found"));
 });
 
-// Error-handling middleware.
-// Any call to next() that includes an
-// Error() will skip regular middleware and
-// only be processed by error-handling middleware.
-// This changes our error handling throughout the application,
-// but allows us to change the processing of ALL errors
-// at once in a single location, which is important for
-// scalability and maintainability.
+// Middleware for Error-handling
 app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.json({ error: err.message });
 });
 
+//Start the server
 app.listen(port, () => {
   console.log(`Server listening on port: ${port}.`);
 });

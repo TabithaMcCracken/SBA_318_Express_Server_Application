@@ -1,33 +1,40 @@
 const express = require("express");
 const router = express.Router();
 
-const trailsData = require("../data/trails");
+const ratings = require("../data/ratings");
 const error = require("../utilities/error");
 
 router
   .route("/")
   .get((req, res) => {
-      res.render("trails", { trails: trailsData});
-    })
+    const links = [
+      {
+        href: "ratings/:id",
+        rel: ":id",
+        type: "GET",
+      },
+    ];
+
+    res.json({ ratings, links });
+  })
   .post((req, res, next) => {
-    if (req.body.userId && req.body.trail && req.body.rating && req.body.description) {
-      const trail = {
-        id: trailsData[trailsData.length - 1].id + 1,
+    if (req.body.userId && req.body.trail && req.body.rating) {
+      const rating = {
+        id: ratings[ratings.length - 1].id + 1,
         userId: req.body.userId,
-        trail: req.body.trail,
-        rating: req.body.rating,
-        description: req.body.description
+        trail: req.body.title,
+        rating: req.body.content,
       };
 
-      trails.push(trail);
-      res.json(trails[trails.length - 1]);
+      ratings.push(rating);
+      res.json(ratings[ratings.length - 1]);
     } else next(error(400, "Insufficient Data"));
   });
 
 router
   .route("/:id")
   .get((req, res, next) => {
-    const trail = trails.find((p) => p.id == req.params.id);
+    const rating = ratings.find((p) => p.id == req.params.id);
 
     const links = [
       {
@@ -42,31 +49,31 @@ router
       },
     ];
 
-    if (trail) res.json({ trail, links });
+    if (rating) res.json({ rating, links });
     else next();
   })
   .patch((req, res, next) => {
-    const trail = trails.find((p, i) => {
+    const rating = ratings.find((p, i) => {
       if (p.id == req.params.id) {
         for (const key in req.body) {
-          trails[i][key] = req.body[key];
+          ratings[i][key] = req.body[key];
         }
         return true;
       }
     });
 
-    if (trail) res.json(trail);
+    if (rating) res.json(rating);
     else next();
   })
   .delete((req, res, next) => {
-    const trail = trails.find((p, i) => {
+    const rating = ratings.find((p, i) => {
       if (p.id == req.params.id) {
-        trails.splice(i, 1);
+        ratings.splice(i, 1);
         return true;
       }
     });
 
-    if (trail) res.json(trail);
+    if (rating) res.json(rating);
     else next();
   });
 
