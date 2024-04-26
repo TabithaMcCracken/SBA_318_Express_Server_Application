@@ -19,15 +19,15 @@ router
         description: req.body.description
       };
 
-      trails.push(trail);
-      res.json(trails[trails.length - 1]);
+      trailsData.push(trail);
+      res.json(trailsData[trailsData.length - 1]);
     } else next(error(400, "Insufficient Data"));
   });
 
 router
   .route("/:id")
   .get((req, res, next) => {
-    const trail = trails.find((p) => p.id == req.params.id);
+    const trail = trailsData.find((p) => p.id == req.params.id);
 
     const links = [
       {
@@ -45,29 +45,17 @@ router
     if (trail) res.json({ trail, links });
     else next();
   })
-  .patch((req, res, next) => {
-    const trail = trails.find((p, i) => {
-      if (p.id == req.params.id) {
-        for (const key in req.body) {
-          trails[i][key] = req.body[key];
-        }
-        return true;
-      }
-    });
 
-    if (trail) res.json(trail);
-    else next();
-  })
-  .delete((req, res, next) => {
-    const trail = trails.find((p, i) => {
-      if (p.id == req.params.id) {
-        trails.splice(i, 1);
-        return true;
-      }
-    });
+router.patch("/:id/update", (req, res, next) => {
+  const trailIndex = trailsData.findIndex((p)=>p.id == req.params.id);
+  if (trailIndex !== -1) {
+    const updatedTrail = { ...trailsData[trailIndex], ...req.body };
+    trailsData[trailIndex] = updatedTrail;
+    res.json(updatedTrail);
+  } else {
+    next(error(404, "Trail not found"));
+  }
+});
 
-    if (trail) res.json(trail);
-    else next();
-  });
 
 module.exports = router;

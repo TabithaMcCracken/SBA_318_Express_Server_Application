@@ -8,9 +8,20 @@
 <body>
     <h1>List of Trail Ratings</h1>
     <ul>
-        <% users.forEach(function(user) { %>
-            <li><%= user.name %> - <%= user.username %> (<%= user.email %>)</li>
+        <% ratings.forEach(function(rating) { %>
+            <li><%= rating.trail %> : <%= rating.rating %></li>
         <% }); %>
     </ul>
+
+    <h2>Add New Rating</h2>
+    <form action="/api/ratings" method="POST">
+        <label for="userId">User ID:</label>
+        <input type="text" id="userId" name="userId" required><br>
+        <label for="trail">Trail:</label>
+        <input type="text" id="trail" name="trail" required><br>
+        <label for="rating">Rating:</label>
+        <input type="text" id="rating" name="rating" required><br>
+        <button type="submit">Submit</button>
+    </form>
 </body>
 </html>

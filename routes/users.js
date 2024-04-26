@@ -3,11 +3,6 @@ const router = express.Router();
 const users = require("../data/users");
 const error = require("../utilities/error");
 
-// Route handler for rendering users.ejs
-// router.get("/users", (req,res)=>{
-//   res.render("users", { users });
-// })
-
 router
   .route("/")
   .get((req, res) => {
@@ -52,29 +47,18 @@ router
     if (user) res.json({ user, links });
     else next();
   })
-  .patch((req, res, next) => {
-    const user = users.find((u, i) => {
-      if (u.id == req.params.id) {
-        for (const key in req.body) {
-          users[i][key] = req.body[key];
-        }
-        return true;
-      }
-    });
 
-    if (user) res.json(user);
-    else next();
-  })
-  .delete((req, res, next) => {
-    const user = users.find((u, i) => {
-      if (u.id == req.params.id) {
-        users.splice(i, 1);
-        return true;
-      }
-    });
-
-    if (user) res.json(user);
-    else next();
+router.delete("/:id/delete", (req, res, next) => {
+    const userId = req.params.id;
+  
+    const userIndex = users.findIndex((user) => user.id == userId);
+  
+    if (userIndex !== -1) {
+      const deletedUser = users.splice(userIndex, 1)[0];
+      res.json(deletedUser);
+    } else {
+      next(error(404, "User not found"));
+    }
   });
-
+  
 module.exports = router;

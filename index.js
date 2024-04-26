@@ -48,8 +48,8 @@ app.get("/", (req, res) => {
   res.json({
     links: [
       {
-        href: "/api",
-        rel: "api",
+        href: "/",
+        rel: "self",
         type: "GET",
       },
     ],
@@ -78,6 +78,16 @@ app.get("/api", (req, res) => {
       {
         href: "api/trails",
         rel: "trails",
+        type: "POST",
+      },
+      {
+        href: "api/ratings",
+        rel: "ratings",
+        type: "GET",
+      },
+      {
+        href: "api/ratings",
+        rel: "ratings",
         type: "POST",
       },
     ],
