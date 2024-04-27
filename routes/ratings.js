@@ -28,7 +28,7 @@ router
 router
   .route("/:id")
   .get((req, res, next) => {
-    const rating = ratings.find((p) => p.id == req.params.id);
+    const rating = ratingsData.find((p) => p.id == req.params.id);
 
     const links = [
       {
@@ -46,29 +46,41 @@ router
     if (rating) res.json({ rating, links });
     else next();
   })
-  .patch((req, res, next) => {
-    const rating = ratings.find((p, i) => {
+
+router.patch("/:id/update", (req, res, next) => {
+    const rating = ratingsData.find((p, i) => {
       if (p.id == req.params.id) {
         for (const key in req.body) {
-          ratings[i][key] = req.body[key];
+          ratingsData[i][key] = req.body[key];
         }
         return true;
       }
     });
 
-    if (rating) res.json(rating);
-    else next();
+    if (rating) {
+      console.log("PATCH request successful.")
+      res.json(rating);
+    } else {
+      next();
+    }
   })
-  .delete((req, res, next) => {
-    const rating = ratings.find((p, i) => {
+
+
+router.delete("/:id/delete", (req, res, next) => {
+    const rating = ratingsData.find((p, i) => {
       if (p.id == req.params.id) {
-        ratings.splice(i, 1);
+        ratingsData.splice(i, 1);
         return true;
       }
     });
 
-    if (rating) res.json(rating);
-    else next();
+    if (rating) {
+      console.log("DELETE request successful.")
+      res.json(rating);
+    }
+    else {
+      next();
+    }
   });
 
 module.exports = router;

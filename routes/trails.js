@@ -11,7 +11,7 @@ router
     })
   .post((req, res, next) => {
     if (req.body.userId && req.body.trail && req.body.rating && req.body.description) {
-      const trail = {
+      const newTrail = {
         id: trailsData[trailsData.length - 1].id + 1,
         userId: req.body.userId,
         trail: req.body.trail,
@@ -19,8 +19,9 @@ router
         description: req.body.description
       };
 
-      trailsData.push(trail);
-      res.json(trailsData[trailsData.length - 1]);
+      trailsData.push(newTrail);
+      res.redirect("/api/trails")
+      console.log("PATCH request successful.")
     } else next(error(400, "Insufficient Data"));
   });
 
@@ -45,17 +46,40 @@ router
     if (trail) res.json({ trail, links });
     else next();
   })
-
+  
 router.patch("/:id/update", (req, res, next) => {
-  const trailIndex = trailsData.findIndex((p)=>p.id == req.params.id);
-  if (trailIndex !== -1) {
-    const updatedTrail = { ...trailsData[trailIndex], ...req.body };
-    trailsData[trailIndex] = updatedTrail;
-    res.json(updatedTrail);
-  } else {
-    next(error(404, "Trail not found"));
-  }
-});
+    const trail = trailsData.find((p, i) => {
+      if (p.id == req.params.id) {
+        for (const key in req.body) {
+          trailsData[i][key] = req.body[key];
+        }
+        return true;
+      }
+    });
 
+    if (trail) {
+      console.log("PATCH request successful.")
+      res.json(trail);
+    } else {
+      next();
+    }
+  })
+  
+router.delete("/:id/delete", (req, res, next) => {
+    const trail = trailsData.find((p, i) => {
+      if (p.id == req.params.id) {
+        trailsData.splice(i, 1);
+        return true;
+      }
+    });
+
+    if (trail) {
+      console.log("DELETE request successful.")
+      res.json(trail);
+    }
+    else {
+      next();
+    }
+  });
 
 module.exports = router;

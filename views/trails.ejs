@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trails</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
 </head>
 <body>
     <h1>List of Trails</h1>
@@ -12,5 +16,18 @@
             <li><%= trail.trail %> - <%= trail.rating %> (<%= trail.description %>)</li>
         <% }); %>
     </ul>
+
+    <h2>Add New Trail</h2>
+    <form action="/api/trails" method="POST">
+        <label for="userId">User ID:</label>
+        <input type="text" id="userId" name="userId" required><br>
+        <label for="trail">Trail:</label>
+        <input type="text" id="trail" name="trail" required><br>
+        <label for="rating">Rating:</label>
+        <input type="text" id="rating" name="rating" required><br>
+        <label for="rating">Description:</label>
+        <input type="text" id="description" name="description" required><br>
+        <button type="submit">Submit</button>
+    </form>
 </body>
 </html>

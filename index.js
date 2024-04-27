@@ -1,11 +1,12 @@
-console.log('Hello World')
 // Import required modules
 const express = require("express");
 const bodyParser = require("body-parser");
+const error = require("./utilities/error");
+
+// Files
 const users = require("./routes/users");
 const trails = require("./routes/trails");
 const ratings = require("./routes/ratings");
-const error = require("./utilities/error");
 
 // Create Express app
 const app = express();
@@ -14,11 +15,14 @@ const port = 3000;
 // Setup EJS template engine
 app.set("view engine", "ejs");
 
+// Access static file
+app.use(express.static(__dirname + '/styles'))
+
 // Middleware for Parsing
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ extended: true }));
 
-// Middleware for Logging
+// Middleware for Logging Time Stamp and Request info
 app.use((req, res, next) => {
   const time = new Date();
 
@@ -33,66 +37,16 @@ ${time.toLocaleTimeString()}: Received a ${req.method} request to ${req.url}.`
   next();
 });
 
-// Routes
-app.use("/api/users", users);
-app.use("/api/trails", trails);
-app.use("/api/ratings", ratings);
+// 3 Routes
+app.use("/api/users", addHateoasLinks(users));
+app.use("/api/trails", addHateoasLinks(trails));
+app.use("/api/ratings", addHateoasLinks(ratings));
 
 // Sets route handler for the root URL("/")
 app.get("/", (req, res) => {
   res.render("index", { title: "Hiking Trails Page" });
 });
 
-// HATEOAS links
-app.get("/", (req, res) => {
-  res.json({
-    links: [
-      {
-        href: "/",
-        rel: "self",
-        type: "GET",
-      },
-    ],
-  });
-});
-
-// HATEOAS links
-app.get("/api", (req, res) => {
-  res.json({
-    links: [
-      {
-        href: "api/users",
-        rel: "users",
-        type: "GET",
-      },
-      {
-        href: "api/users",
-        rel: "users",
-        type: "POST",
-      },
-      {
-        href: "api/trails",
-        rel: "trails",
-        type: "GET",
-      },
-      {
-        href: "api/trails",
-        rel: "trails",
-        type: "POST",
-      },
-      {
-        href: "api/ratings",
-        rel: "ratings",
-        type: "GET",
-      },
-      {
-        href: "api/ratings",
-        rel: "ratings",
-        type: "POST",
-      },
-    ],
-  });
-});
 
 // 404 Middleware
 app.use((req, res, next) => {
@@ -104,6 +58,17 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.json({ error: err.message });
 });
+
+// Function to add HATEOAS links to routes
+function addHateoasLinks(router) {
+  router.use((req, res, next) => {
+    res.hateoas = (links) => {
+      res.json({ ...links, data: res.locals.data });
+    };
+    next();
+  });
+  return router;
+}
 
 //Start the server
 app.listen(port, () => {
