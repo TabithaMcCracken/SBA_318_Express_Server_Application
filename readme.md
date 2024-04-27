@@ -36,19 +36,31 @@ This project implements a RESTful API using Node.js and Express. It provides rou
 
 4. **Utilize reasonable data structuring practices(5%)**: Good data scrtucturing practices are used throughout.
 
-5. 6. 7. 8. **Create GET, POST, PATCH/PUT and DELETE routes for the client(20%)**: GET, POST, PATCH/PUT, and DELETE routes are implemented for each data category.
+5. **Create GET routes for the client(5%)**: GET routes are implemented for each data category.
+
+6. **Create POST routes for the client(5%)**: POST routes that allow for client creation are implemented for each data category.
+
+7. **Create PATCH/PUT routes for the client(5%)**: PATCH routes are implemented for each data category and can be tested with Postman or similar extensions.
+8. **Create DELETE routes for the client(5%)**: DELETE routes are implemented for each data category and can be tested with Postman or similar extensions.
 
 9. **Include query parameters for data filtering(5%)**: Each data category uses query parameters for filtering data.
 
 10. **Utilize route parameters(5%)**: Route parameters are used throughout.
 
 11. **Adhere to the guiding principles of REST(10%)**:
+
 **Client-Server Architecture**: The application follows a client-server architecture where the server provides RESTful services.
+
 **Stateless Communication**: Each request from the client to the server contains all the information necessary to understand and fulfill the request. The server does not store any client state between requests.
+
 **Uniform Interface**: The API endpoints follow a uniform interface, including resource URIs, HTTP methods (GET, POST, PUT/PATCH, DELETE), and representations (JSON data).
+
 **Resource-Based**: Resources are the key abstraction in a RESTful API. In this project, users, trails, and ratings are treated as resources, each with its own URI and CRUD operations.
+
 **Manipulation of Resources Through Representations**: Clients interact with resources through representations (JSON data) exchanged between the client and server.
+
 **Self-Descriptive Messages**: Each message includes metadata, such as content type, which enables the client to interpret the response correctly.
+
 **Hypermedia as the Engine of Application State (HATEOAS)**: HATEOAS is implemented by including links in API responses that guide clients on possible next actions. This is demonstrated in the project by providing links for related operations (e.g., PATCH and DELETE) along with resource representations.
 
 12. **Create and render at least one view using a view template and template engine.(8%)**: Views are rendered using the EJS template engine.
