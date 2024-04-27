@@ -1,3 +1,5 @@
+// The "ratings" data includes information about
+// the user's trail ratings.
 const ratings = [
   {
     id: 1,

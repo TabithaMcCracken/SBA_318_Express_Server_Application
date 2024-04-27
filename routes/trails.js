@@ -4,6 +4,7 @@ const router = express.Router();
 const trailsData = require("../data/trails");
 const error = require("../utilities/error");
 
+// Allows the client access the trails data and to add trails
 router
   .route("/")
   .get((req, res) => {
@@ -25,6 +26,7 @@ router
     } else next(error(400, "Insufficient Data"));
   });
 
+  // Allows the client to accesss trail information by id
 router
   .route("/:id")
   .get((req, res, next) => {
@@ -46,7 +48,8 @@ router
     if (trail) res.json({ trail, links });
     else next();
   })
-  
+
+// Allows the client to update trail information by id
 router.patch("/:id/update", (req, res, next) => {
     const trail = trailsData.find((p, i) => {
       if (p.id == req.params.id) {
@@ -65,6 +68,7 @@ router.patch("/:id/update", (req, res, next) => {
     }
   })
   
+// Allows the client to delete trail information by id
 router.delete("/:id/delete", (req, res, next) => {
     const trail = trailsData.find((p, i) => {
       if (p.id == req.params.id) {

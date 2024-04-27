@@ -4,6 +4,7 @@ const router = express.Router();
 const userData = require("../data/users");
 const error = require("../utilities/error");
 
+// Allows the client to see the user information and add new users
 router
   .route("/")
   .get((req, res) => {
@@ -24,10 +25,10 @@ router
 
       userData.push(user);
       res.redirect("/api/users"); 
-      // res.json(userData[userData.length - 1]);
     } else next(error(400, "Insufficient Data"));
   });
 
+  // Allows the client to access the user information by id
 router.get("/:id", (req, res, next) => {
     const user = userData.find((u) => u.id == req.params.id);
 
@@ -48,7 +49,7 @@ router.get("/:id", (req, res, next) => {
     else next();
   })
 
-
+// Allows the client to update user information by id
 router.patch("/:id/update", (req, res, next) => {
     const user = userData.find((p, i) => {
       if (p.id == req.params.id) {
@@ -67,6 +68,7 @@ router.patch("/:id/update", (req, res, next) => {
     }
   })
 
+// Allows the user to delete user data by id
 router.delete("/:id/delete", (req, res, next) => {
     const user = userData.find((p, i) => {
       if (p.id == req.params.id) {

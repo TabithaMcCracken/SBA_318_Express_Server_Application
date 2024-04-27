@@ -4,6 +4,7 @@ const router = express.Router();
 const ratingsData = require("../data/ratings");
 const error = require("../utilities/error");
 
+// Allows the client access the ratings and add ratings
 router
   .route("/")
   .get((req, res) => {
@@ -25,6 +26,7 @@ router
     }
   });
 
+// Allows the client to search for data rating id
 router
   .route("/:id")
   .get((req, res, next) => {
@@ -47,6 +49,7 @@ router
     else next();
   })
 
+// Allows the client to update trail ratings by id
 router.patch("/:id/update", (req, res, next) => {
     const rating = ratingsData.find((p, i) => {
       if (p.id == req.params.id) {
@@ -65,7 +68,7 @@ router.patch("/:id/update", (req, res, next) => {
     }
   })
 
-
+// Allows the client to delete ratings by id
 router.delete("/:id/delete", (req, res, next) => {
     const rating = ratingsData.find((p, i) => {
       if (p.id == req.params.id) {

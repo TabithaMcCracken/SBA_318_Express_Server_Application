@@ -1,4 +1,4 @@
-// The "users" data will be simple information about
+// The "users" data includes information about
 // the application's user base.
 const users = [
     {
