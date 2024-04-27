@@ -22,7 +22,7 @@ router
 
       trailsData.push(newTrail);
       res.redirect("/api/trails")
-      console.log("PATCH request successful.")
+      console.log("POST request successful.")
     } else next(error(400, "Insufficient Data"));
   });
 

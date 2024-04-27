@@ -39,6 +39,7 @@ ${time.toLocaleTimeString()}: Received a ${req.method} request to ${req.url}.`
 
 // 3 Routes
 app.use("/api/users", addHateoasLinks(users));
+// app.use("/api/users", users);
 app.use("/api/trails", addHateoasLinks(trails));
 app.use("/api/ratings", addHateoasLinks(ratings));
 
